@@ -5,7 +5,7 @@
 
 
 RealisticSteering = {};
-RealisticSteering.Version = "1.0.0";
+RealisticSteering.Version = "1.0.0.0";
 RealisticSteering.config_changed = false;
 local myName = "FS19_RealisticSteering";
 RealisticSteering.actions             = { 'RealisticSteering_Toggle'}
@@ -80,7 +80,7 @@ end
 
 -- only needed for global action event
 function RealisticSteering:registerActionEventsMenu()
-    print("RealisticSteering registerActionEventsMenu")
+    --print("RealisticSteering registerActionEventsMenu")
     local erg, eventName = InputBinding.registerActionEvent(g_inputBinding, 'RealisticSteering_Settings',self, RealisticSteering.onOpenSettings ,false ,true ,false ,true)
     if erg then
          g_inputBinding.events[eventName].displayIsVisible = false
@@ -197,7 +197,8 @@ function RealisticSteering:onUpdate(dt)
 			self.realisticSteering.minDeltaRot = 0.65;
 			
 			self.realisticSteering.isActive = true;
-			self.RealisticSteeringModuleInitialized = true;		
+			self.RealisticSteeringModuleInitialized = true;	
+						
 		end;
 	end;	
 	
@@ -206,26 +207,19 @@ function RealisticSteering:onUpdate(dt)
 		local speed = self:getLastSpeed();
 		local deltaPercent = math.min((math.abs(speed) / (self.realisticSteering.minDeltaSpeed - self.realisticSteering.maxDeltaSpeed)),1.0);
 		local deltaMinus = deltaPercent * RealisticSteering.steeringSpeed;
-		local delta = (1 - deltaMinus) * dt * 0.001;
 		
 		local curDelta = self.spec_drivable.axisSide - self.realisticSteering.axisSide;
-		
+		curDelta = curDelta * (1 - deltaMinus);
+
 		if (self.spec_drivable.axisSide > 0 and curDelta < 0) or (self.spec_drivable.axisSide < 0 and curDelta > 0) then
-			delta = delta * RealisticSteering.resetForce;
+			curDelta = curDelta * RealisticSteering.resetForce;
 		end;
 		
 		local MinusRot = deltaPercent * RealisticSteering.angleLimit;
-		self.maxRotTime = self.realisticSteering.maxRotTimeSaved * (1 - deltaMinus);
-		self.minRotTime = self.realisticSteering.minRotTimeSaved * (1 - deltaMinus);		
+		self.maxRotTime = self.realisticSteering.maxRotTimeSaved * (1 - MinusRot);
+		self.minRotTime = self.realisticSteering.minRotTimeSaved * (1 - MinusRot);		
 		
-		
-		if curDelta > 0 then			
-			self.spec_drivable.axisSide = self.realisticSteering.axisSide + delta; --math.min(curDelta, delta);			
-		else
-			if curDelta < 0 then
-				self.spec_drivable.axisSide = self.realisticSteering.axisSide - delta; --math.min(math.abs(curDelta), math.abs(delta));
-			end;
-		end;
+		self.spec_drivable.axisSide = self.realisticSteering.axisSide + curDelta;		
 		self.realisticSteering.axisSide = self.spec_drivable.axisSide;
 	end;
 end;
