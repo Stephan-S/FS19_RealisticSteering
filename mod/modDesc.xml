@@ -49,7 +49,7 @@ Die Parameter können bequem über ein Ingame Menü an das persönliche Fahrgef�
         <action name="RealisticSteering_Settings"	category="SYSTEM"   axisType="HALF" ignoreComboMask="false"/>	
 	</actions>
 	
-	<inputBindings>
+	<inputBinding>
 		<actionBinding action="RealisticSteering_Toggle">
 			<binding device="KB_MOUSE_DEFAULT" input="KEY_KP_6" />
 			<binding device="0_XINPUT_GAMEPAD" input="BUTTON_5 BUTTON_17" />
@@ -58,7 +58,7 @@ Die Parameter können bequem über ein Ingame Menü an das persönliche Fahrgef�
 			<binding device="KB_MOUSE_DEFAULT" input="KEY_lshift KEY_KP_5" />
 			<binding device="0_XINPUT_GAMEPAD" input="BUTTON_5 BUTTON_15" />
 		</actionBinding>
-	</inputBindings>
+	</inputBinding>
 	
 </modDesc>
 
