@@ -203,7 +203,7 @@ function RealisticSteering:onUpdate(dt)
 	end;	
 	
 	
-	if self == g_currentMission.controlledVehicle and self.realisticSteering.isActive == true then
+	if self == g_currentMission.controlledVehicle and self.realisticSteering.isActive == true and (self.getIsAIActive == nil or not self:getIsAIActive()) then
 		local speed = self:getLastSpeed();
 		local deltaPercent = math.min((math.abs(speed) / (self.realisticSteering.minDeltaSpeed - self.realisticSteering.maxDeltaSpeed)),1.0);
 		local deltaMinus = deltaPercent * RealisticSteering.steeringSpeed;
